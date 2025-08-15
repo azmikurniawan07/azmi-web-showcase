@@ -13,8 +13,13 @@ import {
   MapPin,
   Send
 } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Contact = () => {
+  const [titleRef, isTitleVisible] = useScrollAnimation(0.3);
+  const [contentRef, isContentVisible] = useScrollAnimation(0.2);
+  const [formRef, isFormVisible] = useScrollAnimation(0.1);
+
   const contactMethods = [
     {
       icon: Mail,
@@ -70,7 +75,10 @@ const Contact = () => {
   return (
     <section id="contact" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 animate-reveal ${isTitleVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Get In <span className="gradient-text">Touch</span>
           </h2>
@@ -81,7 +89,10 @@ const Contact = () => {
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Information */}
-          <div className="space-y-8 animate-fade-in-up">
+          <div 
+            ref={contentRef}
+            className={`space-y-8 animate-reveal-left ${isContentVisible ? 'visible' : ''}`}
+          >
             <div>
               <h3 className="text-2xl font-bold mb-6">Let's Connect</h3>
               <p className="text-muted-foreground mb-8 leading-relaxed">
@@ -96,11 +107,11 @@ const Contact = () => {
               {contactMethods.map((method, index) => (
                 <Card 
                   key={index} 
-                  className="glass-card p-6 hover-glow group cursor-pointer"
+                  className="glass-card p-6 hover-glow hover-lift group cursor-pointer"
                   onClick={() => window.open(method.href, '_blank')}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-lg bg-gradient-to-br ${method.color} shadow-lg`}>
+                    <div className={`p-3 rounded-lg bg-gradient-to-br ${method.color} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       <method.icon className="h-5 w-5 text-white" />
                     </div>
                     <div>
@@ -121,7 +132,7 @@ const Contact = () => {
                     key={index}
                     variant="outline"
                     size="lg"
-                    className="glass-card hover-glow"
+                    className="glass-card hover-glow hover-scale"
                     onClick={() => window.open(social.href, '_blank')}
                   >
                     <social.icon className={`h-5 w-5 ${social.color} transition-colors`} />
@@ -140,7 +151,10 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <Card className="glass-card p-8 hover-glow animate-scale-in">
+          <Card 
+            ref={formRef}
+            className={`glass-card p-8 hover-glow animate-reveal-right ${isFormVisible ? 'visible' : ''}`}
+          >
             <h3 className="text-2xl font-bold mb-6">Send a Message</h3>
             
             <form className="space-y-6">
@@ -182,7 +196,7 @@ const Contact = () => {
               <Button 
                 type="submit" 
                 size="lg" 
-                className="glass-button hover-glow w-full group"
+                className="glass-button hover-glow hover-scale w-full group"
               >
                 <Send className="h-5 w-5 mr-2 group-hover:translate-x-1 transition-transform" />
                 Send Message

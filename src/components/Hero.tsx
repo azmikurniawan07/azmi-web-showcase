@@ -1,8 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import heroBackground from "@/assets/hero-bg.jpg";
 
 const Hero = () => {
+  const [heroRef, isHeroVisible] = useScrollAnimation(0.2);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.querySelector(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -16,7 +25,10 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in-up">
+      <div 
+        ref={heroRef}
+        className={`relative z-10 text-center px-6 max-w-4xl mx-auto animate-reveal ${isHeroVisible ? 'visible' : ''}`}
+      >
         <div className="space-y-6">
           <h1 className="text-5xl md:text-7xl font-bold leading-tight">
             <span className="gradient-text">Azmi Kurniawan</span>
@@ -34,20 +46,36 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
             <Button 
               size="lg" 
-              className="glass-button hover-glow px-8 py-6 text-lg font-medium group"
+              className="glass-button hover-glow px-8 py-6 text-lg font-medium group focus-visible"
+              onClick={() => scrollToSection("#projects")}
             >
               View My Work
-              <ArrowDown className="ml-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
+              <ArrowDown className="ml-2 h-5 w-5 group-hover:translate-y-1 transition-all duration-300" />
             </Button>
             
             <div className="flex gap-4">
-              <Button variant="outline" size="lg" className="glass-card hover-glow">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="glass-card hover-glow hover-scale"
+                onClick={() => window.open("https://github.com/azmikurniawan", "_blank")}
+              >
                 <Github className="h-5 w-5" />
               </Button>
-              <Button variant="outline" size="lg" className="glass-card hover-glow">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="glass-card hover-glow hover-scale"
+                onClick={() => window.open("https://linkedin.com/in/azmikurniawan", "_blank")}
+              >
                 <Linkedin className="h-5 w-5" />
               </Button>
-              <Button variant="outline" size="lg" className="glass-card hover-glow">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="glass-card hover-glow hover-scale"
+                onClick={() => scrollToSection("#contact")}
+              >
                 <Mail className="h-5 w-5" />
               </Button>
             </div>
@@ -56,8 +84,11 @@ const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="scroll-indicator">
-        <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center">
+      <div 
+        className="scroll-indicator cursor-pointer"
+        onClick={() => scrollToSection("#about")}
+      >
+        <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center hover:border-primary transition-colors duration-300">
           <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-float"></div>
         </div>
       </div>

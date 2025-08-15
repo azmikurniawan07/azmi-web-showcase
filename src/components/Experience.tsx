@@ -1,8 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Building } from "lucide-react";
+import { useScrollAnimation, useStaggeredAnimation } from "@/hooks/useScrollAnimation";
 
 const Experience = () => {
+  const [titleRef, isTitleVisible] = useScrollAnimation(0.3);
+  const [expRef, animatedItems] = useStaggeredAnimation(3, 0.3);
+
   const experiences = [
     {
       title: "Senior Frontend Developer",
@@ -48,7 +52,10 @@ const Experience = () => {
   return (
     <section id="experience" className="py-20 px-6 bg-gradient-to-br from-background to-muted/20">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 animate-reveal ${isTitleVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Work <span className="gradient-text">Experience</span>
           </h2>
@@ -61,15 +68,16 @@ const Experience = () => {
           {/* Timeline line */}
           <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary/20 hidden md:block"></div>
 
-          <div className="space-y-12">
+          <div ref={expRef} className="space-y-12">
             {experiences.map((exp, index) => (
               <Card 
                 key={index}
-                className="glass-card p-8 hover-glow relative animate-fade-in-up md:ml-20"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                className={`glass-card p-8 hover-glow hover-lift relative md:ml-20 stagger-item ${
+                  animatedItems.has(index) ? 'visible' : ''
+                }`}
               >
                 {/* Timeline dot */}
-                <div className="absolute -left-12 top-8 w-6 h-6 bg-primary rounded-full border-4 border-background shadow-glow hidden md:block"></div>
+                <div className="absolute -left-12 top-8 w-6 h-6 bg-primary rounded-full border-4 border-background shadow-glow animate-pulse-glow hidden md:block"></div>
 
                 <div className="space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

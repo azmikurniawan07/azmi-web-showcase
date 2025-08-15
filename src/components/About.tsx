@@ -1,8 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Code, Palette, Zap } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const About = () => {
+  const [titleRef, isTitleVisible] = useScrollAnimation(0.3);
+  const [contentRef, isContentVisible] = useScrollAnimation(0.2);
+  const [cardsRef, isCardsVisible] = useScrollAnimation(0.1);
+
   const highlights = [
     {
       icon: Code,
@@ -24,7 +29,10 @@ const About = () => {
   return (
     <section id="about" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 animate-reveal ${isTitleVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             About <span className="gradient-text">Me</span>
           </h2>
@@ -35,7 +43,10 @@ const About = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 animate-fade-in-up">
+          <div 
+            ref={contentRef}
+            className={`space-y-6 animate-reveal-left ${isContentVisible ? 'visible' : ''}`}
+          >
             <p className="text-lg text-muted-foreground leading-relaxed">
               With over 3 years of experience in frontend development, I specialize in building 
               modern web applications using React, TypeScript, and the latest web technologies. 
@@ -56,7 +67,10 @@ const About = () => {
             </div>
           </div>
 
-          <div className="grid gap-6 animate-scale-in">
+          <div 
+            ref={cardsRef}
+            className={`grid gap-6 animate-reveal-right ${isCardsVisible ? 'visible' : ''}`}
+          >
             {highlights.map((item, index) => (
               <Card key={index} className="glass-card p-6 hover-glow">
                 <div className="flex items-start gap-4">

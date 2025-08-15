@@ -8,8 +8,12 @@ import {
   Cloud, 
   Wrench 
 } from "lucide-react";
+import { useScrollAnimation, useStaggeredAnimation } from "@/hooks/useScrollAnimation";
 
 const Skills = () => {
+  const [titleRef, isTitleVisible] = useScrollAnimation(0.3);
+  const [cardsRef, animatedItems] = useStaggeredAnimation(6, 0.15);
+
   const skillCategories = [
     {
       title: "Frontend",
@@ -52,7 +56,10 @@ const Skills = () => {
   return (
     <section id="skills" className="py-20 px-6 bg-gradient-to-br from-background to-muted/20">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 animate-reveal ${isTitleVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Technical <span className="gradient-text">Skills</span>
           </h2>
@@ -61,12 +68,13 @@ const Skills = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div ref={cardsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillCategories.map((category, index) => (
             <Card 
               key={index} 
-              className="glass-card p-6 hover-glow group animate-scale-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className={`glass-card p-6 hover-glow hover-lift group stagger-item ${
+                animatedItems.has(index) ? 'visible' : ''
+              }`}
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className={`p-3 rounded-lg bg-gradient-to-br ${category.color} shadow-lg`}>
@@ -80,7 +88,7 @@ const Skills = () => {
                   <Badge 
                     key={skillIndex} 
                     variant="secondary" 
-                    className="glass-card hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
+                    className="glass-card hover:bg-primary/10 hover:border-primary/30 hover-scale transition-all duration-300"
                   >
                     {skill}
                   </Badge>

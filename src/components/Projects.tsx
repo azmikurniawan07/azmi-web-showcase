@@ -2,8 +2,12 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
+import { useScrollAnimation, useStaggeredAnimation } from "@/hooks/useScrollAnimation";
 
 const Projects = () => {
+  const [titleRef, isTitleVisible] = useScrollAnimation(0.3);
+  const [projectsRef, animatedItems] = useStaggeredAnimation(4, 0.2);
+
   const projects = [
     {
       title: "E-Commerce Platform",
@@ -42,7 +46,10 @@ const Projects = () => {
   return (
     <section id="projects" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 animate-reveal ${isTitleVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Featured <span className="gradient-text">Projects</span>
           </h2>
@@ -51,12 +58,13 @@ const Projects = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div ref={projectsRef} className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <Card 
               key={index} 
-              className="glass-card overflow-hidden hover-glow group animate-scale-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className={`glass-card overflow-hidden hover-glow hover-lift group stagger-item ${
+                animatedItems.has(index) ? 'visible' : ''
+              }`}
             >
               <div className="relative overflow-hidden">
                 <img 
@@ -101,11 +109,11 @@ const Projects = () => {
                 </div>
 
                 <div className="flex gap-3">
-                  <Button size="sm" className="glass-button hover-glow flex-1">
+                  <Button size="sm" className="glass-button hover-glow hover-scale flex-1">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Live Demo
                   </Button>
-                  <Button variant="outline" size="sm" className="glass-card hover-glow">
+                  <Button variant="outline" size="sm" className="glass-card hover-glow hover-scale">
                     <Github className="h-4 w-4" />
                   </Button>
                 </div>
